@@ -44,6 +44,8 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
+font = cv2.FONT_HERSHEY_PLAIN
+
 while True:
 
     #-- Read the camera frame
@@ -64,16 +66,16 @@ while True:
         #-- Unpack the output, get only the first
         rvec, tvec = ret[0][0,0,:], ret[1][0,0,:]
 	
-	    x_position = tvec[0]
-        y_position = tvec[1]
-		z_position = tvec[2]
+	    # x_position = tvec[0]
+        # y_position = tvec[1]
+		# z_position = tvec[2]
 
         #-- Draw the detected marker and put a reference frame over it
         aruco.drawDetectedMarkers(frame, corners)
         aruco.drawAxis(frame, camera_matrix, camera_distortion, rvec, tvec, 10)
         
-        #-- Print the tag position in camera frame
-	    str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(x_position, y_position, z_position)
+        #-- Print the tag position in camera frame  
+        str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(tvec[0], tvec[1], tvec[2])
 	    cv2.putText(frame, str_position, (0, 100), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
 	#--- Display the frame
