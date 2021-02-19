@@ -1,13 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from __future__ import print_function
 from dronekit import connect, VehicleMode
 import numpy as np
 import cv2
 import cv2.aruco as aruco
 import sys, time, math
-import time
 
 connection_string = "/dev/ttyACM0"
 baud_rate = 57600
@@ -18,7 +14,7 @@ vehicle.wait_ready('autopilot_version')
 
 #-- elevator-> radio2 Radio IN normal=1523 up=1924 down=1104
 
-#-- Define Tag
+#--- Define Tag
 id_to_find  = 72
 marker_size  = 10 #- [cm]
 
@@ -48,11 +44,11 @@ font = cv2.FONT_HERSHEY_PLAIN
 
 while True:
 
-    #-- Read the camera frame
+	#-- Read the camera frame
     ret, frame = cap.read()
 
     #-- Convert in gray scale
-    gray    = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #-- OpenCV stores color images in Blue, Green, Red
+    gray    = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #-- remember, OpenCV stores color images in Blue, Green, Red
 
     #-- Find all the aruco markers in the image
     corners, ids, rejected = aruco.detectMarkers(image=gray, dictionary=aruco_dict, parameters=parameters,
@@ -60,25 +56,36 @@ while True:
     
     if ids is not None and ids[0] == id_to_find:
         
-        
+        #-- ret = [rvec, tvec, ?]
+        #-- array of rotation and position of each marker in camera frame
+        #-- rvec = [[rvec_1], [rvec_2], ...]    attitude of the marker respect to camera frame
+        #-- tvec = [[tvec_1], [tvec_2], ...]    position of the marker in camera frame
         ret = aruco.estimatePoseSingleMarkers(corners, marker_size, camera_matrix, camera_distortion)
 
         #-- Unpack the output, get only the first
         rvec, tvec = ret[0][0,0,:], ret[1][0,0,:]
-	
-	    # x_position = tvec[0]
-        # y_position = tvec[1]
-		# z_position = tvec[2]
 
         #-- Draw the detected marker and put a reference frame over it
         aruco.drawDetectedMarkers(frame, corners)
         aruco.drawAxis(frame, camera_matrix, camera_distortion, rvec, tvec, 10)
-        
-        #-- Print the tag position in camera frame  
-        str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(tvec[0], tvec[1], tvec[2])
-	    cv2.putText(frame, str_position, (0, 100), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-	#--- Display the frame
+        x_position = tvec[0]
+        y_position = tvec[1]
+        z_position = tvec[2]
+        
+        str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(x_position, y_position, z_position)
+        cv2.putText(frame, str_position, (0, 100), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+        if y_position <= -7:
+            vehicle.channels.overrides['2'] = 1924
+        elif y_position >= 7:
+            vehicle.channels.overrides['2'] = 1104
+        else:
+            vehicle.channels.overrides['2'] = 1523
+
+   
+
+	# --- Display the frame
     cv2.imshow('frame', frame)
 
     #--- use 'q' to quit
