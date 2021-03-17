@@ -1,4 +1,4 @@
-function dy = longitudinal_equation(t,y,elevator_angle)
+function dy = adjust_longitudinal_equation(t,y,angle,adjust_angle,adjust_time)
     dy = zeros(6,1);
     V = y(1);
     gramma = y(2);
@@ -7,10 +7,10 @@ function dy = longitudinal_equation(t,y,elevator_angle)
     h = y(5);
     r = y(6);
     
-    if t > 5
-        elevator_angle = -25;
+    if t > adjust_time
+        elevator_angle = adjust_angle;
     else
-        elevator_angle = -45;
+        elevator_angle = angle;
     end
     
     convert_to_rad = pi/180;
