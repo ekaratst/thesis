@@ -75,16 +75,16 @@ while True:
         
         str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(x_position, y_position, z_position)
         cv2.putText(frame, str_position, (0, 100), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
-		
-		time.sleep(5)
-        if y_position <= -7:
-            vehicle.channels.overrides['2'] = 1924
-        elif y_position >= 7:
-            vehicle.channels.overrides['2'] = 1104
-        else:
-            vehicle.channels.overrides['2'] = 1523
 
-   
+        #if y_position <= -7:
+        #    vehicle.channels.overrides['2'] = 1924 #elevator-up
+        #elif y_position >= 7:
+        #    vehicle.channels.overrides['2'] = 1104 #elevator-down
+        #else:
+        #    vehicle.channels.overrides['2'] = 1523
+        #time.sleep(5)
+        
+    vehicle.channels.overrides['2'] = 1924
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
