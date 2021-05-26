@@ -42,7 +42,18 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 font = cv2.FONT_HERSHEY_PLAIN
 
+isstarted = False
+const = 180 / math.pi
+aoa_rad = vehicle.attitude.pitch
+aoa_deg  = aoa_rad * const
+total_distance = 5 
+
 while True:
+    airspeed = vehicle.airspeed
+    if airspeed >= 1 and isstarted == False:
+        start = time.time()
+        print("start time.")
+        isstarted = True
 
 	#-- Read the camera frame
     ret, frame = cap.read()
@@ -83,8 +94,16 @@ while True:
             vehicle.channels.overrides['2'] = 1104
         else:
             vehicle.channels.overrides['2'] = 1523
-
-   
+        
+        aispeed_x = airspeed * (math.cos(aoa_rad))
+        end = time.time()
+        duration = end -start
+        distance_x = airspeed_x * duration
+        target_distance_x = total_distance - distance_x
+        distance_z = vehicle.location.global_relative_frame
+        target_distance = math.sqrt(distance_z**2 + target_distance_x**2)
+       
+    
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
