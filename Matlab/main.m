@@ -1,7 +1,7 @@
 convert_to_degree = 180/pi;
-elevator_angle = -45;
-adjust_angle = -85;
-adjust_time = 5;
+elevator_angle = -30;
+% adjust_angle = 3;
+adjust_time = 2;
 
 t_span = [0 15];      %Time period
 Y_init = [   0       % Velocity(V)
@@ -25,11 +25,30 @@ Y_init = [   0       % Velocity(V)
 % title("Simulated DSL Trajectory [\delta = -45]")
 % legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
 % hold off         
-         
+
+%---------------------use------------------------
+% figure(1)
+% for i = 1:4
+%     vel = [8,12,16,20];
+%     Y_init(1) = vel(i);
+%     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time),t_span,Y_init);  
+%     plot(Y1(:,6),Y1(:,5)); 
+%     hold on 
+%     
+% end
+% ylim([0 22])
+% xlabel('Horizontal Distance [m]') 
+% ylabel('Vetical Distance [m]') 
+% title("Simulated DSL Trajectory [\delta = -30, \delta2 = " + adjust_angle + " at t = " + adjust_time + "]")
+% legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
+% hold off
+%---------------------use------------------------
+
 figure(1)
-for i = 1:4
-    vel = [8,12,16,20];
-    Y_init(1) = vel(i);
+for i = 1:8
+    adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
+    adjust_angle = adjust_angle_list(i);
+    Y_init(1) = 8;
     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time),t_span,Y_init);  
     plot(Y1(:,6),Y1(:,5)); 
     hold on 
@@ -38,9 +57,11 @@ end
 ylim([0 22])
 xlabel('Horizontal Distance [m]') 
 ylabel('Vetical Distance [m]') 
-title("Simulated DSL Trajectory [\delta = -45, \delta2 = " + adjust_angle + " at t = " + adjust_time + "]")
-legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
+title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]")
+legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
+
+
 %{
 figure(3)
 for i = 1:4
@@ -69,21 +90,23 @@ ylabel('Theta[degree]')
 title("Theta [\delta = -45, \delta2 = " + adjust_angle + " at t = " + adjust_time + "]")
 legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
 hold off
+%}
 
-figure(5)
+figure(2)
 for i = 1:4
     vel = [8,12,16,20];
     Y_init(1) = vel(i);
     [T1,Y1] = ode45(@(t,y) longitudinal_equation(t,y,elevator_angle),t_span,Y_init);  
-    plot(T1,Y1(:,2)*convert_to_degree); 
+    plot(Y1(:,6),Y1(:,2)*convert_to_degree); 
     hold on 
 end
-xlabel('Time[sec]') 
+xlabel('Horizontal Distance [m]') 
 ylabel('Angle of descent[degree]') 
 title("Angle of descent [\delta = -45]")
 legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
 hold off
 
+%{
 figure(6)
 for i = 1:4
     vel = [8,12,16,20];

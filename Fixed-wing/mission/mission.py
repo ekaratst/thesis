@@ -95,10 +95,10 @@ while True:
         else:
             vehicle.channels.overrides['2'] = 1523
         
-        aispeed_x = airspeed * (math.cos(aoa_rad))
+        airpeed_x = airspeed * (math.cos(aoa_rad))
         end = time.time()
         duration = end -start
-        distance_x = airspeed_x * duration
+        distance_x = airpeed_x * duration
         target_distance_x = total_distance - distance_x
         distance_z = vehicle.location.global_relative_frame
         target_distance = math.sqrt(distance_z**2 + target_distance_x**2)
