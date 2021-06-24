@@ -5,7 +5,7 @@ import sys, time, math
 
 #--- Define Tag
 id_to_find  = 72
-marker_size  = 50 #- [cm]
+marker_size  = 10 #- [cm]
 
 #--- Get the camera calibration path
 calib_path  = ""
