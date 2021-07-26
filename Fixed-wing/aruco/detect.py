@@ -56,8 +56,8 @@ parameters  = aruco.DetectorParameters_create()
 #--- Capture the videocamera (this may also be a video or a picture)
 cap = cv2.VideoCapture(0)
 #-- Set the camera size as the one it was calibrated with
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280) #1280
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720) #720
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) #1280
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #720
 
 font = cv2.FONT_HERSHEY_PLAIN
 
