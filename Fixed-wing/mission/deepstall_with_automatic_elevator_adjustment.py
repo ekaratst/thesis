@@ -121,6 +121,9 @@ while True:
                             math.degrees(yaw_camera))
         cv2.putText(frame, str_attitude, (0, 250), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
+        trajectory_angle = abs(math.degrees(math.atan(pos_camera[2]/pos_camera[1])))
+        cv2.putText(frame, "tarjectory angle: %4.0f"%(trajectory_angle), (0, 300), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
 	# --- Display the frame
     cv2.imshow('frame', frame)
 
