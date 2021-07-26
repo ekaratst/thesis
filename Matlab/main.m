@@ -1,7 +1,7 @@
 convert_to_degree = 180/pi;
 elevator_angle = -30;
 % adjust_angle = 3;
-adjust_time = 2;
+adjust_time = 1;
 
 t_span = [0 15];      %Time period
 Y_init = [   0       % Velocity(V)
