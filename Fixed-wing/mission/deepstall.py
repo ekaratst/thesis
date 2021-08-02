@@ -141,8 +141,11 @@ while True:
         #else:
         #    vehicle.channels.overrides['2'] = 1523
         #time.sleep(5)
-        
-    vehicle.channels.overrides['2'] = 1924
+    print("2088")
+    vehicle.channels.overrides['2'] = 2088
+    time.sleep(5)
+    # print("940")
+    # vehicle.channels.overrides['2'] = 940
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
