@@ -1,7 +1,9 @@
 convert_to_degree = 180/pi;
 elevator_angle = -30;
+adjust_angle2 = 3;
 % adjust_angle = 3;
 adjust_time = 1;
+adjust_time2 = 12;
 
 t_span = [0 15];      %Time period
 Y_init = [   0       % Velocity(V)
@@ -49,7 +51,7 @@ for i = 1:8
     adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
     adjust_angle = adjust_angle_list(i);
     Y_init(1) = 8;
-    [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time),t_span,Y_init);  
+    [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time,adjust_angle2,adjust_time2),t_span,Y_init);  
     plot(Y1(:,6),Y1(:,5)); 
     hold on 
     
@@ -61,6 +63,36 @@ title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
+figure(2)
+for i = 1:8
+    adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
+    adjust_angle = adjust_angle_list(i);
+    Y_init(1) = 8;
+    [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time,adjust_angle2,adjust_time2),t_span,Y_init);  
+    plot(T1,Y1(:,2)*convert_to_degree); 
+    hold on 
+    
+end
+% xlim([0 40])
+xlabel('Horizontal Distance [m]') 
+ylabel('Pitch angle [deg]') 
+title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
+hold off
+
+% figure(3)
+% for i = 1:4
+%     vel = [8,12,16,20];
+%     Y_init(1) = vel(i);
+%     [T1,Y1] = ode45(@(t,y) longitudinal_equation(t,y,elevator_angle),t_span,Y_init);  
+%     plot(T1,Y1(:,2)*convert_to_degree); 
+%     hold on 
+% end
+% xlabel('Time[sec]') 
+% ylabel('Gramma') 
+% title("Gramma")
+% legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
+% hold off
 
 %{
 figure(3)
@@ -92,19 +124,19 @@ legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
 hold off
 %}
 
-figure(2)
-for i = 1:4
-    vel = [8,12,16,20];
-    Y_init(1) = vel(i);
-    [T1,Y1] = ode45(@(t,y) longitudinal_equation(t,y,elevator_angle),t_span,Y_init);  
-    plot(Y1(:,6),Y1(:,2)*convert_to_degree); 
-    hold on 
-end
-xlabel('Horizontal Distance [m]') 
-ylabel('Angle of descent[degree]') 
-title("Angle of descent [\delta = -45]")
-legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
-hold off
+% figure(2)
+% for i = 1:4
+%     vel = [8,12,16,20];
+%     Y_init(1) = vel(i);
+%     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t,y,elevator_angle,adjust_angle,adjust_time),t_span,Y_init);
+%     plot(Y1(:,6),Y1(:,4)*convert_to_degree); 
+%     hold on 
+% end
+% xlabel('Horizontal Distance [m]') 
+% ylabel('Pitch angle[degree]') 
+% title("theta")
+% legend('8 m/s', '12 m/s', '16 m/s', '20 m/s')
+% hold off
 
 %{
 figure(6)

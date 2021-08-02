@@ -1,4 +1,4 @@
-function dy = adjust_longitudinal_equation(t,y,angle,adjust_angle,adjust_time)
+function dy = adjust_longitudinal_equation(t,y,angle,adjust_angle,adjust_time,adjust_angle2,adjust_time2)
     dy = zeros(6,1);
     V = y(1);
     gramma = y(2);
@@ -7,7 +7,10 @@ function dy = adjust_longitudinal_equation(t,y,angle,adjust_angle,adjust_time)
     h = y(5);
     r = y(6);
     
-    if t > adjust_time
+
+    if t>= adjust_time2
+        elevator_angle = adjust_angle2;
+    elseif t >= adjust_time
         elevator_angle = adjust_angle;
     else
         elevator_angle = angle;
