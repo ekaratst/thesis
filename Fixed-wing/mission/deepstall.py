@@ -8,6 +8,11 @@ import sys, time, math
 connection_string = "/dev/ttyACM0"
 baud_rate = 57600
 
+#-------------(deg) 3      0     -5     -10    -15   -20    -25    -30  
+simulate_angle = [47.84, 45.84, 41.5, 36.96, 32.67, 27.57, 24.36, 22.31]
+radio_in_elevator = [940, 1524, 1618, 1712, 1806, 1900, 1994, 2088]
+delta_angle = [3, 0, -5, -10, -15, -20, -25, -30]
+
 print('Connecting to Vehicle on: %s' %connection_string)
 vehicle = connect(connection_string, baud=baud_rate, wait_ready=True)
 vehicle.wait_ready('autopilot_version')
@@ -141,11 +146,19 @@ while True:
         #else:
         #    vehicle.channels.overrides['2'] = 1523
         #time.sleep(5)
-    print("2088")
-    vehicle.channels.overrides['2'] = 2088
-    time.sleep(5)
-    # print("940")
+
+
+        for i in range(8):
+            if trajectory_angle >= simulate_angle[i] or trajectory_angle <= simulate_angle[7]:
+                vehicle.channels.overrides['2'] = radio_in_elevator[i]
+                print(radio_in_elevator[i])
+                print("adjust elevator angle to: " , delta_angle[i], " deg")
+                break
+
+    # vehicle.channels.overrides['2'] = 2088
+    # time.sleep(5)
     # vehicle.channels.overrides['2'] = 940
+
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
