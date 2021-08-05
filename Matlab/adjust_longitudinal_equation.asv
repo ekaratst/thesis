@@ -1,4 +1,4 @@
-function dy = adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, adjust_time, flare_angle, adjust_time2)
+function dy = adjust_longitudinal_equation(t,y,angle,adjust_angle,adjust_time,adjust_angle2,adjust_time2)
     dy = zeros(6,1);
     V = y(1);
     gramma = y(2);
@@ -9,25 +9,20 @@ function dy = adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, 
     
 %     disp(h);
 %     if t>= adjust_time2
-%         elevator_angle = flare_angle;
+%         elevator_angle = adjust_angle2;
 %     elseif t >= adjust_time
 %         elevator_angle = adjust_angle;
-%     elseif t >= 1
-%         elevator_angle = deepstall_angle;
 %     else
-%         elevator_angle = 0;
+%         elevator_angle = angle;
 %     end
     
-    if h <= 0.2
-        elevator_angle = flare_angle;
-    elseif h <= 12
+    if h <= 2
+        elevator_angle = adjust_angle2;
+    elseif h <= 10
         elevator_angle = adjust_angle;
-    elseif h <= 14
-        elevator_angle = deepstall_angle;
-    else
-        elevator_angle = 0;
+    elseif h <= 10
+        elevator_angle = adjust_angle;  
     end
-    
     
     convert_to_rad = pi/180;
 
