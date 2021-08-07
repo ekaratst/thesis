@@ -1,6 +1,6 @@
 convert_to_degree = 180/pi;
 deepstall_angle = -30;
-flare_angle = 0;
+flare_angle = -30;
 % adjust_angle = 3;
 adjust_time = 1;
 adjust_time2 = 3; %12
@@ -67,7 +67,7 @@ figure(2)
 for i = 1:8
     adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
     adjust_angle = adjust_angle_list(i);
-    Y_init(1) = 8;
+    Y_init(1) = 8; %
     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, adjust_time, flare_angle, adjust_time2), t_span, Y_init);  
     plot(T1,Y1(:,2)*convert_to_degree); 
     hold on 

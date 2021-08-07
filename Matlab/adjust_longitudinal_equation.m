@@ -18,14 +18,14 @@ function dy = adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, 
 %         elevator_angle = 0;
 %     end
     
-    if h <= 0.2
-        elevator_angle = flare_angle;
+    if h <= 1
+        elevator_angle = flare_angle; % flare_angle
     elseif h <= 12
-        elevator_angle = adjust_angle;
+        elevator_angle = adjust_angle; % adjust_angle
     elseif h <= 14
         elevator_angle = deepstall_angle;
     else
-        elevator_angle = 0;
+        elevator_angle = -10;
     end
     
     
