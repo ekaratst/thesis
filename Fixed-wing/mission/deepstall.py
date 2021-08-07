@@ -154,10 +154,14 @@ while True:
                 print(radio_in_elevator[i])
                 print("adjust elevator angle to: " , delta_angle[i], " deg")
                 break
-
+    else:
+        vehicle.channels.overrides['2'] = radio_in_elevator[7]
     # vehicle.channels.overrides['2'] = 2088
     # time.sleep(5)
     # vehicle.channels.overrides['2'] = 940
+    
+    if vehicle.location.global_relative_frame <= 1.2:
+         vehicle.channels.overrides['2'] = radio_in_elevator[7]
 
 
 	# --- Display the frame
