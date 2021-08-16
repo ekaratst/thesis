@@ -58,8 +58,10 @@ for i = 1:8
 end
 ylim([0 22])
 xlabel('Horizontal Distance [m]') 
-ylabel('Vetical Distance [m]') 
-title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]")
+ylabel('Vertical Distance [m]') 
+%title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]")
+%title("Simulated DSL Trajectory 8 m/s [CMalpha = -0.031]")
+title("Simulated DSL Trajectory 8 m/s [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
@@ -69,14 +71,16 @@ for i = 1:8
     adjust_angle = adjust_angle_list(i);
     Y_init(1) = 8; %
     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, adjust_time, flare_angle, adjust_time2), t_span, Y_init);  
-    plot(T1,Y1(:,2)*convert_to_degree); 
+    plot(Y1(:,6),Y1(:,4)*convert_to_degree); 
     hold on 
     
 end
 % xlim([0 40])
-xlabel('time [sec]') 
+xlabel('Horizontal Distance [m]') 
 ylabel('Pitch angle [deg]') 
-title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+%title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+%title("Pitch angle [CMalpha = -0.031]")
+title("Pitch angle [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
@@ -84,18 +88,37 @@ figure(3)
 for i = 1:8
     adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
     adjust_angle = adjust_angle_list(i);
-    Y_init(1) = 8;
+    Y_init(1) = 8; %
     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, adjust_time, flare_angle, adjust_time2), t_span, Y_init);  
-    plot(T1,Y1(:,5)); 
+    plot(Y1(:,6),(Y1(:,4)-Y1(:,2))*convert_to_degree); 
     hold on 
     
 end
 % xlim([0 40])
-xlabel('time [sec]') 
-ylabel('Vetical Distance [m]') 
-title("Height [\delta = -30, at t = " + adjust_time + "]")
+xlabel('Horizontal Distance [m]') 
+ylabel('Alpha [deg]') 
+%title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+%title("Alpha [CMalpha = -0.031]")
+title("Alpha [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
+
+% figure(3)
+% for i = 1:8
+%     adjust_angle_list = [3,0,-5,-10,-15,-20,-25,-30];
+%     adjust_angle = adjust_angle_list(i);
+%     Y_init(1) = 8;
+%     [T1,Y1] = ode45(@(t,y) adjust_longitudinal_equation(t, y, deepstall_angle, adjust_angle, adjust_time, flare_angle, adjust_time2), t_span, Y_init);  
+%     plot(T1,Y1(:,5)); 
+%     hold on 
+%     
+% end
+% % xlim([0 40])
+% xlabel('time [sec]') 
+% ylabel('Vetical Distance [m]') 
+% title("Height [\delta = -30, at t = " + adjust_time + "]")
+% legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
+% hold off
 
 % figure(3)
 % for i = 1:4
