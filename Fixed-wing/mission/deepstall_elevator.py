@@ -78,11 +78,15 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) #1280
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #720
 
+out = cv2.VideoWriter('video_test.avi', 
+                         cv2.VideoWriter_fourcc(*'MJPG'),
+                         30, (640,480))
+
 font = cv2.FONT_HERSHEY_PLAIN
 
-experimental_height = 12
-flare_altitude = 1.2
-quit_program_altitude = 0.5 
+experimental_height = 12 #12
+flare_altitude = 1.2 #1.2
+quit_program_altitude = 0.5 #0.5 
 current_altitude = vehicle.location.global_relative_frame.alt
 check_flare_altitude = current_altitude - experimental_height + flare_altitude
 check_quit_program_altitude = current_altitude - experimental_height + quit_program_altitude
@@ -182,6 +186,8 @@ while True:
     if vehicle.location.global_relative_frame.alt <= check_flare_altitude:
          vehicle.channels.overrides['2'] = radio_in_elevator[7]
 
+    # --- write video
+    out.write(frame)
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
@@ -191,5 +197,6 @@ while True:
     # if key == ord('q'):
     if vehicle.location.global_relative_frame.alt <= check_quit_program_altitude:
         cap.release()
+        out.release()
         cv2.destroyAllWindows()
         break
