@@ -8,9 +8,12 @@ import sys, time, math
 connection_string = "/dev/ttyACM0"
 baud_rate = 57600
 
-#-------------(deg) 3      0     -5     -10    -15   -20    -25    -30  
+#1678 -> 10 deg
+#1507 -> Neutral
+#1186 -> -30 deg
+#-------------(deg) 10      0     -5     -10    -15   -20    -25    -30  
 simulate_angle = [47.84, 45.84, 41.5, 36.96, 32.67, 27.57, 24.36, 22.31]
-radio_in_elevator = [940, 1524, 1618, 1712, 1806, 1900, 1994, 2088]
+radio_in_elevator = [1558, 1507, 1451, 1398, 1345, 1292, 1239, 1186]
 delta_angle = [3, 0, -5, -10, -15, -20, -25, -30]
 
 print('Connecting to Vehicle on: %s' %connection_string)
