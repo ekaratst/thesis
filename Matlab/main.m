@@ -1,6 +1,6 @@
 convert_to_degree = 180/pi;
 deepstall_angle = -30;
-flare_angle = -30;
+flare_angle = -20;
 % adjust_angle = 3;
 adjust_time = 1;
 adjust_time2 = 3; %12
@@ -10,7 +10,7 @@ Y_init = [   0       % Velocity(V)
              0       % Angle of descent(gramma) -30*pi/180
              0       % Pitch rate(q)
              0       % Pitch angle(theta) 20*pi/180
-             15       % height(h)
+             13       % height(h)
              0];     % horizontal distance(r)
 
 % figure(1)
@@ -59,9 +59,9 @@ end
 ylim([0 22])
 xlabel('Horizontal Distance [m]') 
 ylabel('Vertical Distance [m]') 
-%title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]")
+title("Simulated DSL Trajectory 8 m/s [\delta = -30, at t = " + adjust_time + "]")
 %title("Simulated DSL Trajectory 8 m/s [CMalpha = -0.031]")
-title("Simulated DSL Trajectory 8 m/s [CMalpha = 0]")
+%title("Simulated DSL Trajectory 8 m/s [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
@@ -78,9 +78,9 @@ end
 % xlim([0 40])
 xlabel('Horizontal Distance [m]') 
 ylabel('Pitch angle [deg]') 
-%title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
 %title("Pitch angle [CMalpha = -0.031]")
-title("Pitch angle [CMalpha = 0]")
+%title("Pitch angle [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
@@ -97,9 +97,9 @@ end
 % xlim([0 40])
 xlabel('Horizontal Distance [m]') 
 ylabel('Alpha [deg]') 
-%title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
+title("Pitch angle [\delta = -30, at t = " + adjust_time + "]")
 %title("Alpha [CMalpha = -0.031]")
-title("Alpha [CMalpha = 0]")
+%title("Alpha [CMalpha = 0]")
 legend('3\circ', '0\circ', '-5\circ', '-10\circ', '-15\circ', '-20\circ', '-25\circ', '-30\circ')
 hold off
 
