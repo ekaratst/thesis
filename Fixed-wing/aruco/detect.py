@@ -1,11 +1,21 @@
 import numpy as np
 import cv2
 import cv2.aruco as aruco
-import sys, time, math
+import sys, time, math, threading
+
 
 #--- Define Tag
 id_to_find  = 72
 marker_size  = 10 #- [cm]
+timer_exit = 10
+
+def exit_program():
+    print("cap release")
+    cap.release()
+    print("out release")
+    out.release()
+    print("destroyAllWindows")
+    cv2.destroyAllWindows()
 
 # Checks if a matrix is a valid rotation matrix.
 def isRotationMatrix(R):
@@ -64,6 +74,12 @@ out = cv2.VideoWriter('video_test.avi',
                          30, (640,480))
 
 font = cv2.FONT_HERSHEY_PLAIN
+
+
+    
+
+t = threading.Timer(timer_exit, exit_program)
+t.start()
 
 while True:
 
@@ -140,3 +156,7 @@ while True:
         out.release()
         cv2.destroyAllWindows()
         break
+
+    
+
+

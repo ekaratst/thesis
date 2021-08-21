@@ -96,9 +96,9 @@ time.sleep(4)
 print("Deep stall")
 vehicle.channels.overrides['2'] = radio_in_elevator[7] #deepstall
 time.sleep(1)
+t = 5
 
-
-while True:
+while t:
 
 	#-- Read the camera frame
     ret, frame = cap.read()
@@ -195,8 +195,13 @@ while True:
     #--- use 'q' to quit
     # key = cv2.waitKey(1) & 0xFF
     # if key == ord('q'):
-    if vehicle.location.global_relative_frame.alt <= check_quit_program_altitude:
-        cap.release()
-        out.release()
-        cv2.destroyAllWindows()
-        break
+    # if vehicle.location.global_relative_frame.alt <= check_quit_program_altitude:
+    #     cap.release()
+    #     out.release()
+    #     cv2.destroyAllWindows()
+        # break
+    t -= 1
+
+cap.release()
+out.release()
+cv2.destroyAllWindows()
