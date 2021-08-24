@@ -1,31 +1,13 @@
-from __future__ import print_function
-from dronekit import connect, VehicleMode
 import numpy as np
 import cv2
 import cv2.aruco as aruco
 import sys, time, math, threading
 
-connection_string = "/dev/ttyACM0"
-baud_rate = 57600
-
-#1678 -> 10 deg
-#1507 -> Neutral
-#1186 -> -30 deg
-#-------------(deg) 3      0     -5     -10    -15   -20    -25    -30  
-simulate_angle = [50.84, 48.48, 44.57, 40.43, 36.66, 32.11, 28.41, 26.18]
-radio_in_elevator = [1558, 1507, 1451, 1398, 1345, 1292, 1239, 1186]
-delta_angle = [3, 0, -5, -10, -15, -20, -25, -30]
-timer_exit = 10
-
-print('Connecting to Vehicle on: %s' %connection_string)
-vehicle = connect(connection_string, baud=baud_rate, wait_ready=True)
-vehicle.wait_ready('autopilot_version')
-
-#-- elevator-> radio2 Radio IN normal=1523 up=1924 down=1104
 
 #--- Define Tag
 id_to_find  = 72
 marker_size  = 10 #- [cm]
+timer_exit = 10
 
 def exit_program():
     print("cap release")
@@ -93,22 +75,11 @@ out = cv2.VideoWriter('video_test.avi',
 
 font = cv2.FONT_HERSHEY_PLAIN
 
-experimental_height = 12 #12
-flare_altitude = 1.2 #1.2
-quit_program_altitude = 0.5 #0.5 
-current_altitude = vehicle.location.global_relative_frame.alt
-check_flare_altitude = current_altitude - experimental_height + flare_altitude
-check_quit_program_altitude = current_altitude - experimental_height + quit_program_altitude
+
+    
 
 t = threading.Timer(timer_exit, exit_program)
 t.start()
-
-print("++Start++")
-time.sleep(4)
-print("Deep stall")
-vehicle.channels.overrides['2'] = radio_in_elevator[7] #deepstall
-time.sleep(1)
-
 
 while True:
 
@@ -133,18 +104,19 @@ while True:
         #-- Unpack the output, get only the first
         rvec, tvec = ret[0][0,0,:], ret[1][0,0,:]
 
+        # x_position = tvec[0]
+        # y_position = tvec[1]
+		# z_position = tvec[2]
+
         #-- Draw the detected marker and put a reference frame over it
         aruco.drawDetectedMarkers(frame, corners)
         aruco.drawAxis(frame, camera_matrix, camera_distortion, rvec, tvec, 10)
 
-        x_position = tvec[0]
-        y_position = tvec[1]
-        z_position = tvec[2]
-        
-        str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(x_position, y_position, z_position)
+         #-- Print the tag position in camera frame
+        str_position = "MARKER Position x=%4.0f z=%4.0f z=%4.0f"%(tvec[0], tvec[1], tvec[2])
         cv2.putText(frame, str_position, (0, 100), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        #-- Obtain the rotation matrix tag->camera
+         #-- Obtain the rotation matrix tag->camera
         R_ct    = np.matrix(cv2.Rodrigues(rvec)[0])
         R_tc    = R_ct.T
 
@@ -172,33 +144,6 @@ while True:
         trajectory_angle = abs(math.degrees(math.atan(pos_camera[2]/pos_camera[1])))
         cv2.putText(frame, "tarjectory angle: %4.0f"%(trajectory_angle), (0, 300), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        #if y_position <= -7:
-        #    vehicle.channels.overrides['2'] = 1924 #elevator-up
-        #elif y_position >= 7:
-        #    vehicle.channels.overrides['2'] = 1104 #elevator-down
-        #else:
-        #    vehicle.channels.overrides['2'] = 1523
-        #time.sleep(5)
-
-
-        for i in range(8):
-            if trajectory_angle >= simulate_angle[i] or trajectory_angle <= simulate_angle[7]:
-                vehicle.channels.overrides['2'] = radio_in_elevator[i]
-                state_elevator = radio_in_elevator[i]
-                print(radio_in_elevator[i])
-                print("adjust elevator angle to: " , delta_angle[i], " deg")
-                break
-    else:
-        vehicle.channels.overrides['2'] = radio_in_elevator[7]
-    # vehicle.channels.overrides['2'] = 2088
-    # time.sleep(5)
-    # vehicle.channels.overrides['2'] = 940
-    print("Altitude: ", vehicle.location.global_relative_frame.alt)
-    
-    if vehicle.location.global_relative_frame.alt <= check_flare_altitude:
-         vehicle.channels.overrides['2'] = radio_in_elevator[7]
-
-    # --- write video
     out.write(frame)
 
 	# --- Display the frame
@@ -206,12 +151,12 @@ while True:
 
     #--- use 'q' to quit
     key = cv2.waitKey(1) & 0xFF
-    # if vehicle.location.global_relative_frame.alt <= check_quit_program_altitude:
     if key == ord('q'):
         cap.release()
         out.release()
         cv2.destroyAllWindows()
         break
-   
+
+    
 
 
