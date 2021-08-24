@@ -21,8 +21,6 @@ print('Connecting to Vehicle on: %s' %connection_string)
 vehicle = connect(connection_string, baud=baud_rate, wait_ready=True)
 vehicle.wait_ready('autopilot_version')
 
-#-- elevator-> radio2 Radio IN normal=1523 up=1924 down=1104
-
 #--- Define Tag
 id_to_find  = 72
 marker_size  = 10 #- [cm]
@@ -172,31 +170,21 @@ while True:
         trajectory_angle = abs(math.degrees(math.atan(pos_camera[2]/pos_camera[1])))
         cv2.putText(frame, "tarjectory angle: %4.0f"%(trajectory_angle), (0, 300), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        #if y_position <= -7:
-        #    vehicle.channels.overrides['2'] = 1924 #elevator-up
-        #elif y_position >= 7:
-        #    vehicle.channels.overrides['2'] = 1104 #elevator-down
-        #else:
-        #    vehicle.channels.overrides['2'] = 1523
-        #time.sleep(5)
+    #     for i in range(8):
+    #         if trajectory_angle >= simulate_angle[i] or trajectory_angle <= simulate_angle[7]:
+    #             vehicle.channels.overrides['2'] = radio_in_elevator[i]
+    #             state_elevator = radio_in_elevator[i]
+    #             print(radio_in_elevator[i])
+    #             print("adjust elevator angle to: " , delta_angle[i], " deg")
+    #             break
+    # else:
+    #     vehicle.channels.overrides['2'] = radio_in_elevator[7]
 
-
-        for i in range(8):
-            if trajectory_angle >= simulate_angle[i] or trajectory_angle <= simulate_angle[7]:
-                vehicle.channels.overrides['2'] = radio_in_elevator[i]
-                state_elevator = radio_in_elevator[i]
-                print(radio_in_elevator[i])
-                print("adjust elevator angle to: " , delta_angle[i], " deg")
-                break
-    else:
-        vehicle.channels.overrides['2'] = radio_in_elevator[7]
-    # vehicle.channels.overrides['2'] = 2088
-    # time.sleep(5)
-    # vehicle.channels.overrides['2'] = 940
     print("Altitude: ", vehicle.location.global_relative_frame.alt)
+    # print("Flare: ", check_flare_altitude)
     
-    if vehicle.location.global_relative_frame.alt <= check_flare_altitude:
-         vehicle.channels.overrides['2'] = radio_in_elevator[7]
+    # if vehicle.location.global_relative_frame.alt <= check_flare_altitude:
+    #      vehicle.channels.overrides['2'] = radio_in_elevator[7]
 
     # --- write video
     out.write(frame)

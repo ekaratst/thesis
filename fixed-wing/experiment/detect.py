@@ -104,10 +104,6 @@ while True:
         #-- Unpack the output, get only the first
         rvec, tvec = ret[0][0,0,:], ret[1][0,0,:]
 
-        # x_position = tvec[0]
-        # y_position = tvec[1]
-		# z_position = tvec[2]
-
         #-- Draw the detected marker and put a reference frame over it
         aruco.drawDetectedMarkers(frame, corners)
         aruco.drawAxis(frame, camera_matrix, camera_distortion, rvec, tvec, 10)
