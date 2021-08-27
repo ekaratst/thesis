@@ -6,8 +6,8 @@ import sys, time, math, threading
 
 #--- Define Tag
 id_to_find  = 72
-marker_size  = 10 #- [cm]
-timer_exit = 10
+marker_size  = 50 #- [cm]
+timer_exit = 30
 
 def exit_program():
     print("cap release")
@@ -69,6 +69,7 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) #1280
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #720
 
+print("create file video")
 out = cv2.VideoWriter('video_test.avi', 
                          cv2.VideoWriter_fourcc(*'MJPG'),
                          30, (640,480))

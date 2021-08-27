@@ -15,7 +15,7 @@ baud_rate = 57600
 simulate_angle = [50.84, 48.48, 44.57, 40.43, 36.66, 32.11, 28.41, 26.18]
 radio_in_elevator = [1558, 1507, 1451, 1398, 1345, 1292, 1239, 1186]
 delta_angle = [3, 0, -5, -10, -15, -20, -25, -30]
-timer_exit = 10
+timer_exit = 15
 
 print('Connecting to Vehicle on: %s' %connection_string)
 vehicle = connect(connection_string, baud=baud_rate, wait_ready=True)
@@ -23,7 +23,7 @@ vehicle.wait_ready('autopilot_version')
 
 #--- Define Tag
 id_to_find  = 72
-marker_size  = 10 #- [cm]
+marker_size  = 50 #- [cm]
 
 def exit_program():
     print("cap release")
@@ -85,9 +85,10 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640) #1280
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #720
 
-out = cv2.VideoWriter('video_test.avi', 
+print("create file video")
+out = cv2.VideoWriter('deepstall_floor2_2.avi', 
                          cv2.VideoWriter_fourcc(*'MJPG'),
-                         30, (640,480))
+                         15, (640,480))
 
 font = cv2.FONT_HERSHEY_PLAIN
 
@@ -98,15 +99,22 @@ current_altitude = vehicle.location.global_relative_frame.alt
 check_flare_altitude = current_altitude - experimental_height + flare_altitude
 check_quit_program_altitude = current_altitude - experimental_height + quit_program_altitude
 
-t = threading.Timer(timer_exit, exit_program)
-t.start()
+# t = threading.Timer(timer_exit, exit_program)
+# t.start()
+# print("3")
+# time.sleep(1)
+# print("2")
+# time.sleep(1)
+# print("1")
+# time.sleep(1)
+# print("++Start++")
+# time.sleep(2)
+# print("Deep stall")
+# vehicle.channels.overrides['2'] = radio_in_elevator[7] #deepstall
+# time.sleep(1)
 
-print("++Start++")
-time.sleep(4)
-print("Deep stall")
-vehicle.channels.overrides['2'] = radio_in_elevator[7] #deepstall
-time.sleep(1)
-
+round = 0
+check_first_round = True
 
 while True:
 
@@ -191,7 +199,26 @@ while True:
 
 	# --- Display the frame
     cv2.imshow('frame', frame)
+    print("---",round,"---")
 
+    # print("first round")
+    if round == 5:
+        t = threading.Timer(timer_exit, exit_program)
+        t.start()
+        print("3")
+        time.sleep(1)
+        print("2")
+        time.sleep(1)
+        print("1")
+        time.sleep(2.5)
+        #print("++Start++")
+        #time.sleep(2)
+        print("Deep stall")
+        vehicle.channels.overrides['2'] = radio_in_elevator[7] #deepstall
+        time.sleep(1)
+        check_first_round = False
+
+    round = round + 1
     #--- use 'q' to quit
     key = cv2.waitKey(1) & 0xFF
     # if vehicle.location.global_relative_frame.alt <= check_quit_program_altitude:
@@ -200,6 +227,7 @@ while True:
         out.release()
         cv2.destroyAllWindows()
         break
+    
    
 
 
